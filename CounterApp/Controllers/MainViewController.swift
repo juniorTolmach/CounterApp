@@ -27,29 +27,17 @@ class MainViewController: UIViewController, UITextViewDelegate {
             Int(counterLabel.text ?? "0") ?? 0
         }
     }
-    
-    private let date = Date()
-    private var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "Дата - dd.MM.yyyy, Время - HH:mm"
-        return formatter
-    }()
-    private var dateString: String {
-        dateFormatter.string(from: date)
-    }
+    private let currentDate = Date().fullDate
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-    }
-    
     @IBAction private func addNumberByOne(_ sender: Any) {
+        
         counterLabel.text = String(counter + 1)
-        textView.text += "\(dateString)\n" + Description.numberPlusOne.rawValue
+        textView.text += "\(currentDate)\n" + Description.numberPlusOne.rawValue
         let range = NSRange(location: textView.text.count - 1, length: 0)
         textView.scrollRangeToVisible(range)
         scrollAutoTextView()
@@ -58,17 +46,17 @@ class MainViewController: UIViewController, UITextViewDelegate {
     @IBAction private func subtractNumberByOne(_ sender: Any) {
         if counter > 0 {
             counterLabel.text = String(counter - 1)
-            textView.text += "\(dateString)\n" + Description.numberMinusOne.rawValue
+            textView.text += "\(currentDate)\n" + Description.numberMinusOne.rawValue
             scrollAutoTextView()
         } else {
-            textView.text += "\(dateString)\n" + Description.numbermenoDizero.rawValue
+            textView.text += "\(currentDate)\n" + Description.numbermenoDizero.rawValue
             scrollAutoTextView()
         }
     }
     
     @IBAction private func restartCounter(_ sender: Any) {
         counterLabel.text = "0"
-        textView.text += "\(dateString)\n" + Description.numberRestart.rawValue
+        textView.text += "\(currentDate)\n" + Description.numberRestart.rawValue
         scrollAutoTextView()
     }
     
@@ -84,5 +72,13 @@ class MainViewController: UIViewController, UITextViewDelegate {
         textView.layer.cornerRadius = 10
         
         textView.isEditable = false
+    }
+}
+
+extension Date {
+    var fullDate:String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "Дата: dd.MM.YY Время: HH:mm"
+        return dateFormatter.string(from: Date())
     }
 }
